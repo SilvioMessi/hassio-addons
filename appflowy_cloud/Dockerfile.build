@@ -1,0 +1,28 @@
+FROM ghcr.io/home-assistant/aarch64-base:3.19 as build
+# build appflowy cloud
+# https://github.com/AppFlowy-IO/AppFlowy-Cloud/blob/0.3.22/Dockerfile
+# https://github.com/AppFlowy-IO/AppFlowy-Cloud/blob/0.3.22/admin_frontend/Dockerfile
+WORKDIR /appflowy_cloud
+RUN apk add --no-cache git=2.43.0-r0
+RUN apk add --no-cache openssl-dev=3.1.4-r6
+RUN apk add --no-cache protobuf-dev=24.4-r0
+RUN apk add --no-cache cargo=1.76.0-r0
+RUN git clone https://github.com/AppFlowy-IO/AppFlowy-Cloud.git --depth 1 --branch 0.3.22
+WORKDIR /appflowy_cloud/AppFlowy-Cloud
+RUN rm /appflowy_cloud/AppFlowy-Cloud/libs/collab-rt-entity/build.rs
+ENV OPENSSL_NO_VENDOR=Y
+ENV PROTOC=/usr/bin/protoc
+ENV SQLX_OFFLINE=true
+RUN cargo build --profile=release --features="" --bin appflowy_cloud
+WORKDIR /appflowy_cloud/AppFlowy-Cloud/admin_frontend
+RUN cargo build --release --bin admin_frontend
+# build gotrue
+# https://github.com/AppFlowy-IO/AppFlowy-Cloud/blob/0.3.22/docker/gotrue.Dockerfile
+WORKDIR /gotrue
+RUN apk add --no-cache go=1.21.9-r0
+RUN git clone https://github.com/supabase/gotrue.git --depth 1 --branch v2.117.0
+WORKDIR /gotrue/gotrue
+RUN cp /appflowy_cloud/AppFlowy-Cloud/docker/gotrue.patch .
+RUN git apply gotrue.patch
+ENV CGO_ENABLED=0
+RUN go build -o /gotrue/gotrue/build/gotrue .
