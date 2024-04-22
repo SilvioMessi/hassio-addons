@@ -6,7 +6,22 @@ on:
 jobs:
   buildx:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
     steps:
+      -
+        name: Prepare
+        run: |
+          platform=${{ matrix.platform }}
+          if [ platform="linux/amd64" ]; then
+            echo "DOCKER_ARCH=aarch64" >> $GITHUB_ENV
+          else
+            echo "DOCKER_ARCH=amd64" >> $GITHUB_ENV
+          fi
       -
         name: Checkout
         uses: actions/checkout@v4
@@ -25,4 +40,5 @@ jobs:
           context: appflowy_cloud
           file: appflowy_cloud/Dockerfile.build
           push: false
-          platforms: linux/amd64,linux/arm64
+          build-args: BUILD_FROM="ghcr.io/home-assistant/{{ env.DOCKER_ARCH }}-base:3.19"
+          platforms: ${{ matrix.platform }}

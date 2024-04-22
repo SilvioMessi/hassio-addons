@@ -1,4 +1,6 @@
-FROM ghcr.io/home-assistant/aarch64-base:3.19 as build
+ARG BUILD_FROM
+FROM $BUILD_FROM
+ENV RUST_BACKTRACE=1 
 # build appflowy cloud
 # https://github.com/AppFlowy-IO/AppFlowy-Cloud/blob/0.3.22/Dockerfile
 # https://github.com/AppFlowy-IO/AppFlowy-Cloud/blob/0.3.22/admin_frontend/Dockerfile
