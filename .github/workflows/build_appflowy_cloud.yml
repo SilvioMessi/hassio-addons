@@ -22,6 +22,7 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v5
         with:
-          context: appflowy_cloud/Dockerfile.build
+          context: appflowy_cloud
+          file: appflowy_cloud/Dockerfile.build
           push: false
           platforms: linux/amd64,linux/arm64
