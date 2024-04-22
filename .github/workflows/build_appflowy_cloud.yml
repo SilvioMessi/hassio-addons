@@ -18,11 +18,11 @@ jobs:
         run: |
           platform=${{ matrix.platform }}
           if [ platform="linux/amd64" ]; then
-            echo "DOCKER_ARCH=aarch64"
-            echo "DOCKER_ARCH=aarch64" >> $GITHUB_ENV
+            echo "DOCKER_ARCH=amd64"
+            echo "DOCKER_ARCH=amd64" >> $GITHUB_ENV
           else
             echo "DOCKER_ARCH=aarch64"
-            echo "DOCKER_ARCH=amd64" >> $GITHUB_ENV
+            echo "DOCKER_ARCH=aarch64" >> $GITHUB_ENV
           fi
       -
         name: Checkout
