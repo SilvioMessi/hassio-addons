@@ -20,7 +20,7 @@ jobs:
           ref: "0.3.23"
       - name: Prepare
         run: |
-          sudo apt install -y gcc-aarch64-linux-gnu
+          sudo apt install -y gcc-aarch64-linux-gnu protobuf-compiler
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
         with:
