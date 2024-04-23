@@ -18,7 +18,9 @@ jobs:
         with:
           repository: AppFlowy-IO/AppFlowy-Cloud
           ref: "0.3.23"
-
+      - name: Prepare
+        run: |
+          apt install -y aarch64-linux-gnu-gcc
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
         with:
