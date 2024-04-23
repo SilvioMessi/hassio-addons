@@ -23,7 +23,7 @@ jobs:
           sudo apt install -y gcc-aarch64-linux-gnu protobuf-compiler
           mkdir .cargo
           echo [target.aarch64-unknown-linux-gnu] >> .cargo/config.toml
-          echo linker = "aarch64-linux-gnu-gcc" >> .cargo/config.toml
+          echo 'linker = "aarch64-linux-gnu-gcc"' >> .cargo/config.toml
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
         with:
