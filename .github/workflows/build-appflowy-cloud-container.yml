@@ -7,7 +7,7 @@ on:
         required: true
         type: string
 permissions:
-  contents: write
+  packages: write
 jobs:
   build-appflowy-cloud-container:
     runs-on: ${{ matrix.runner }}
