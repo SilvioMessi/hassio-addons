@@ -34,7 +34,7 @@ jobs:
           fileName: appflowy_cloud
           out-file-path: appflowy_cloud/appflowy_cloud
       - name: Download Admin Fronted
-        uses: actions/download-artifact@v4
+        uses: robinraju/release-downloader@v1.10
         with:
           tag: ${{ matrix.target }}-admin_frontend-${{ inputs.tag }}
           fileName: admin_frontend
@@ -53,4 +53,4 @@ jobs:
           push: true
           build-args: BUILD_FROM=${{ matrix.image }}
           platforms: ${{ matrix.platform }}
-          tags: ghcr.io/SilvioMessi/${{ matrix.arch }}-appflowy_cloud:${{ inputs.tag }}
+          tags: ghcr.io/silviomessi/${{ matrix.arch }}-appflowy_cloud:${{ inputs.tag }}
