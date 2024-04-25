@@ -36,7 +36,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.target }}-appflowy_cloud
-          path: target/${{ matrix.target }}/rease/appflowy_cloud
+          path: target/${{ matrix.target }}/release/appflowy_cloud
       - name: Build Admin Fronted
         run: |
           cd admin_frontend
@@ -45,4 +45,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.target }}-admin_frontend
-          path: target/${{ matrix.target }}/rease/admin_frontend
+          path: target/${{ matrix.target }}/release/admin_frontend
