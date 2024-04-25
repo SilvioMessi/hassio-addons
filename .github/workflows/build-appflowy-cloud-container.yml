@@ -58,8 +58,8 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ghcr.io/${{ github.repository }}
-          tags: ${{ matrix.arch }}-appflowy_cloud:${{ inputs.tag }}
+          images: ghcr.io/${{ github.repository }}/${{ matrix.arch }}-appflowy_cloud
+          tags: ${{ inputs.tag }}
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
