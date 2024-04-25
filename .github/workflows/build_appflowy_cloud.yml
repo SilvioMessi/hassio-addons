@@ -20,7 +20,7 @@ jobs:
           ref: "0.3.26"
       - name: Prepare
         run: |
-          sudo apt install -y gcc-aarch64-linux-gnu protobuf-compiler libssl-dev
+          sudo apt install -y gcc-aarch64-linux-gnu protobuf-compiler
           mkdir .cargo
           echo [target.aarch64-unknown-linux-gnu] >> .cargo/config.toml
           echo 'linker = "aarch64-linux-gnu-gcc"' >> .cargo/config.toml
@@ -40,6 +40,7 @@ jobs:
       - name: Build Admin Fronted
         run: |
           cd admin_frontend
+          sed -i 's/reqwest = "0.11.27"/reqwest = { version = "0.11.27", features = ["native-tls-vendored"] }/g' Cargo.toml
           cargo build --verbose --locked --release --bin admin_frontend --target ${{ matrix.target }}
       - name: Upload Admin Fronted
         uses: actions/upload-artifact@v4
