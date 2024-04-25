@@ -13,11 +13,11 @@ jobs:
             runner: ubuntu-latest
             target: aarch64-unknown-linux-gnu
     steps:
-      - name: Checkout
+      - name: Checkout AppFlowy Cloud
         uses: actions/checkout@v4
         with:
           repository: AppFlowy-IO/AppFlowy-Cloud
-          ref: "0.3.23"
+          ref: "0.3.26"
       - name: Prepare
         run: |
           sudo apt install -y gcc-aarch64-linux-gnu protobuf-compiler
@@ -28,9 +28,21 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: "${{ matrix.target }}"
-
       - name: Setup Cache
         uses: Swatinem/rust-cache@v2
-
-      - name: Build Binary
-        run: cargo build --verbose --locked --release --target ${{ matrix.target }}
+      - name: Build Appflowy Cloud
+        run: cargo build --verbose --locked --release --bin appflowy_cloud --target ${{ matrix.target }}
+      - name: Upload Appflowy Cloud
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.target }}-appflowy_cloud
+          path: target/${{ matrix.target }}/rease/appflowy_cloud
+      - name: Build Admin Fronted
+        run: |
+          cd admin_frontend
+          cargo build --verbose --locked --release --bin admin_frontend --target ${{ matrix.target }}
+      - name: Upload Admin Fronted
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.target }}-admin_frontend
+          path: target/${{ matrix.target }}/rease/admin_frontend
