@@ -2,7 +2,7 @@ ARG BUILD_FROM
 FROM $BUILD_FROM as build
 WORKDIR /appflowy_cloud
 RUN apk add --no-cache git=2.43.0-r0
-RUN git clone https://github.com/AppFlowy-IO/AppFlowy-Cloud.git --depth 1 --branch 0.3.22
+RUN git clone https://github.com/AppFlowy-IO/AppFlowy-Cloud.git --depth 1 --branch 0.3.26
 WORKDIR /gotrue
 RUN apk add --no-cache go=1.21.9-r0
 RUN git clone https://github.com/supabase/gotrue.git --depth 1 --branch v2.117.0
