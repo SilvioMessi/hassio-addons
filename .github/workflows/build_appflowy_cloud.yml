@@ -1,7 +1,7 @@
-name: Build AppFlowy Cloud
+name: AppFlowy Cloud
 on: [push]
 jobs:
-  build:
+  cross-compile-appflowy-cloud:
     runs-on: ${{ matrix.runner }}
     strategy:
       matrix:
@@ -47,3 +47,46 @@ jobs:
         with:
           name: ${{ matrix.target }}-admin_frontend
           path: target/${{ matrix.target }}/release/admin_frontend
+  build-appflowy-cloud-container:
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      matrix:
+        include:
+          - name: linux-amd64
+            runner: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            platfom: linux/amd64
+            image: ghcr.io/home-assistant/amd64-base:3.19
+          - name: linux-arm64
+            runner: ubuntu-latest
+            target: aarch64-unknown-linux-gnu
+            platfom: linux/arm64
+            image: ghcr.io/home-assistant/aarch64-base:3.19
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Download Appflowy Cloud
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ matrix.target }}-appflowy_cloud
+          path: appflowy_cloud
+      - name: Download Admin Fronted
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ matrix.target }}-admin_frontend
+          path: appflowy_cloud
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          platforms: linux/amd64,linux/arm64
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: appflowy_cloud
+          file: appflowy_cloud/Dockerfile
+          push: true
+          build-args: BUILD_FROM=${{ matrix.image }}
+          platforms: ${{ matrix.platform }}
+          tags: appflowy_cloud
