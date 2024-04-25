@@ -67,3 +67,4 @@ jobs:
           build-args: BUILD_FROM=${{ matrix.image }}
           platforms: ${{ matrix.platform }}
           tags: ${{ steps.meta.outputs.tags }}
+          provenance: false
