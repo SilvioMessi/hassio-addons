@@ -20,7 +20,7 @@ jobs:
           ref: "0.3.26"
       - name: Prepare
         run: |
-          sudo apt install -y gcc-aarch64-linux-gnu protobuf-compiler
+          sudo apt install -y gcc-aarch64-linux-gnu protobuf-compiler libssl-dev
           mkdir .cargo
           echo [target.aarch64-unknown-linux-gnu] >> .cargo/config.toml
           echo 'linker = "aarch64-linux-gnu-gcc"' >> .cargo/config.toml
