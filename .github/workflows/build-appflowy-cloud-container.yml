@@ -24,7 +24,7 @@ jobs:
           - name: linux-arm64
             runner: ubuntu-latest
             target: aarch64-unknown-linux-gnu
-            platfom: linux/arm64
+            platfom: linux/arm64v8
             image: ghcr.io/home-assistant/aarch64-base:3.19
             arch: aarch64
     steps:
@@ -47,7 +47,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
-          platforms: linux/amd64,linux/arm64
+          platforms: ${{ matrix.platform }}
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
@@ -56,7 +56,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Docker meta
         id: meta
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: ghcr.io/${{ github.repository }}/appflowy_cloud
           tags: ${{ inputs.tag }}
