@@ -72,12 +72,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ matrix.target }}-appflowy_cloud
-          path: appflowy_cloud
+          path: appflowy_cloud/appflowy_cloud
       - name: Download Admin Fronted
         uses: actions/download-artifact@v4
         with:
           name: ${{ matrix.target }}-admin_frontend
-          path: appflowy_cloud
+          path: appflowy_cloud/admin_frontend
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx

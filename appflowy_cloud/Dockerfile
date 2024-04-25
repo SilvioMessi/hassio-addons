@@ -27,8 +27,8 @@ COPY --from=build /gotrue/gotrue/build/gotrue /gotrue
 COPY --from=build /gotrue/gotrue/migrations /gotrue/migrations
 # add appflowy cloud
 RUN mkdir /appflowy_cloud
-COPY aarch64-unknown-linux-gnu-appflowy_cloud /appflowy_cloud/appflowy_cloud
-COPY aarch64-unknown-linux-gnu-admin_frontend /appflowy_cloud/admin_frontend
+COPY appflowy_cloud /appflowy_cloud/appflowy_cloud
+COPY admin_frontend /appflowy_cloud/admin_frontend
 COPY --from=build /appflowy_cloud/AppFlowy-Cloud/admin_frontend/assets /appflowy_cloud/assets
 COPY --from=build /appflowy_cloud/AppFlowy-Cloud/migrations/before /appflowy_cloud
 # setup postgresql
