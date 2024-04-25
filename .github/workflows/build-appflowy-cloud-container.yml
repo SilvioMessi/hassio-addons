@@ -6,6 +6,8 @@ on:
         description: "AppFlowy Cloud tag"
         required: true
         type: string
+permissions:
+  contents: write
 jobs:
   build-appflowy-cloud-container:
     runs-on: ${{ matrix.runner }}
