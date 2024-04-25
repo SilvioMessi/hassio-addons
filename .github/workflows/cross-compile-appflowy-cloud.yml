@@ -59,7 +59,6 @@ jobs:
           artifacts: ${{ matrix.target }}-appflowy_cloud
           allowUpdates: true
           tag: ${{ inputs.tag }} 
-            - name: Relese Appflowy Cloud
       - name: Relese Admin Fronted
         uses: ncipollo/release-action@v1
         with:
