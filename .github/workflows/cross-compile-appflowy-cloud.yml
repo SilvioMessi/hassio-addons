@@ -1,5 +1,11 @@
-name: AppFlowy Cloud
-on: [push]
+name: (Cross)Compile AppFlowy Cloud
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "AppFlowy Cloud tag"
+        required: true
+        type: string
 jobs:
   cross-compile-appflowy-cloud:
     runs-on: ${{ matrix.runner }}
@@ -17,7 +23,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: AppFlowy-IO/AppFlowy-Cloud
-          ref: "0.3.26"
+          ref: ${{ inputs.tag }}
       - name: Prepare
         run: |
           sudo apt install -y gcc-aarch64-linux-gnu protobuf-compiler
@@ -47,49 +53,17 @@ jobs:
         with:
           name: ${{ matrix.target }}-admin_frontend
           path: target/${{ matrix.target }}/release/admin_frontend
-  build-appflowy-cloud-container:
-    needs: cross-compile-appflowy-cloud
-    runs-on: ${{ matrix.runner }}
-    strategy:
-      matrix:
-        include:
-          - name: linux-amd64
-            runner: ubuntu-latest
-            target: x86_64-unknown-linux-gnu
-            platfom: linux/amd64
-            image: ghcr.io/home-assistant/amd64-base:3.19
-            arch: amd64
-          - name: linux-arm64
-            runner: ubuntu-latest
-            target: aarch64-unknown-linux-gnu
-            platfom: linux/arm64
-            image: ghcr.io/home-assistant/aarch64-base:3.19
-            arch: aarch64
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Download Appflowy Cloud
-        uses: actions/download-artifact@v4
+      - name: Relese Appflowy Cloud
+        uses: ncipollo/release-action@v1
         with:
-          name: ${{ matrix.target }}-appflowy_cloud
-          path: appflowy_cloud/appflowy_cloud
-      - name: Download Admin Fronted
-        uses: actions/download-artifact@v4
+          artifacts: ${{ matrix.target }}-appflowy_cloud
+          allowUpdates: true
+          tag: ${{ inputs.tag }} 
+            - name: Relese Appflowy Cloud
+      - name: Relese Admin Fronted
+        uses: ncipollo/release-action@v1
         with:
-          name: ${{ matrix.target }}-admin_frontend
-          path: appflowy_cloud/admin_frontend
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-        with:
-          platforms: linux/amd64,linux/arm64
-      - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          context: appflowy_cloud
-          file: appflowy_cloud/Dockerfile
-          push: true
-          build-args: BUILD_FROM=${{ matrix.image }}
-          platforms: ${{ matrix.platform }}
-          tags: appflowy_cloud:${{ matrix.arch }}
+          artifacts: ${{ matrix.target }}-admin_frontend
+          allowUpdates: true
+          tag: ${{ inputs.tag }} 
+            - name: Relese Appflowy Cloud
