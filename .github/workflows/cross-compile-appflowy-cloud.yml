@@ -26,46 +26,27 @@ jobs:
         with:
           repository: AppFlowy-IO/AppFlowy-Cloud
           ref: ${{ inputs.tag }}
-      - name: Prepare
-        run: |
-          sudo apt install -y gcc-aarch64-linux-gnu protobuf-compiler
-          mkdir .cargo
-          echo [target.aarch64-unknown-linux-gnu] >> .cargo/config.toml
-          echo 'linker = "aarch64-linux-gnu-gcc"' >> .cargo/config.toml
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: "${{ matrix.target }}"
-      - name: Setup Cache
-        uses: Swatinem/rust-cache@v2
-      - name: Build Appflowy Cloud
-        run: cargo build --verbose --locked --release --bin appflowy_cloud --target ${{ matrix.target }}
       - name: Upload Appflowy Cloud
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.target }}-appflowy_cloud
-          path: target/${{ matrix.target }}/release/appflowy_cloud
-      - name: Build Admin Fronted
-        run: |
-          cd admin_frontend
-          sed -i 's/reqwest = "0.11.27"/reqwest = { version = "0.11.27", features = ["native-tls-vendored"] }/g' Cargo.toml
-          cargo build --verbose --locked --release --bin admin_frontend --target ${{ matrix.target }}
+          path: Dockerfile
       - name: Upload Admin Fronted
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.target }}-admin_frontend
-          path: target/${{ matrix.target }}/release/admin_frontend
+          path: Dockerfile
       - name: Relese Appflowy Cloud
         uses: ncipollo/release-action@v1
         with:
-          artifacts: ${{ matrix.target }}-appflowy_cloud
-          name: ${{ matrix.target }}-appflowy_cloud__${{ inputs.tag }}
+          artifacts: Dockerfile
+          name: ${{ matrix.target }}-appflowy_cloud-${{ inputs.tag }}
           allowUpdates: true
-          tag: ${{ inputs.tag }}
+          tag: ${{ matrix.target }}-${{ inputs.tag }}
       - name: Relese Admin Fronted
         uses: ncipollo/release-action@v1
         with:
-          artifacts: ${{ matrix.target }}-admin_frontend
-          name: ${{ matrix.target }}-admin_frontend__${{ inputs.tag }}
+          artifacts: Dockerfile
+          name: ${{ matrix.target }}-admin_frontend-${{ inputs.tag }}
           allowUpdates: true
           tag: ${{ inputs.tag }}
