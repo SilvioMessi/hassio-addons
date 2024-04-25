@@ -59,11 +59,11 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: target/${{ matrix.target }}/release/appflowy_cloud
-          tag: ${{ matrix.target }}-appflowy_cloud__${{ inputs.tag }}
+          tag: ${{ matrix.target }}-appflowy_cloud-${{ inputs.tag }}
           allowUpdates: true
       - name: Relese Admin Fronted
         uses: ncipollo/release-action@v1
         with:
           artifacts: target/${{ matrix.target }}/release/admin_frontend
-          tag: ${{ matrix.target }}-admin_frontend__${{ inputs.tag }}
+          tag: ${{ matrix.target }}-admin_frontend-${{ inputs.tag }}
           allowUpdates: true
