@@ -57,12 +57,13 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: ${{ matrix.target }}-appflowy_cloud
+          name: ${{ matrix.target }}-appflowy_cloud__${{ inputs.tag }}
           allowUpdates: true
-          tag: ${{ inputs.tag }} 
+          tag: ${{ inputs.tag }}
       - name: Relese Admin Fronted
         uses: ncipollo/release-action@v1
         with:
           artifacts: ${{ matrix.target }}-admin_frontend
+          name: ${{ matrix.target }}-admin_frontend__${{ inputs.tag }}
           allowUpdates: true
-          tag: ${{ inputs.tag }} 
-            - name: Relese Appflowy Cloud
+          tag: ${{ inputs.tag }}
