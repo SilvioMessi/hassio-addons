@@ -42,11 +42,9 @@ jobs:
           artifacts: Dockerfile
           name: ${{ matrix.target }}-appflowy_cloud-${{ inputs.tag }}
           allowUpdates: true
-          tag: ${{ matrix.target }}-${{ inputs.tag }}
       - name: Relese Admin Fronted
         uses: ncipollo/release-action@v1
         with:
           artifacts: Dockerfile
           name: ${{ matrix.target }}-admin_frontend-${{ inputs.tag }}
           allowUpdates: true
-          tag: ${{ inputs.tag }}
