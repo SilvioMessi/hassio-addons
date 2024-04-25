@@ -53,4 +53,4 @@ jobs:
           push: true
           build-args: BUILD_FROM=${{ matrix.image }}
           platforms: ${{ matrix.platform }}
-          tags: ghcr.io/silviomessi/${{ matrix.arch }}-appflowy_cloud:${{ inputs.tag }}
+          tags: ghcr.io/silviomessi/hassio-addons/${{ matrix.arch }}-appflowy_cloud:${{ inputs.tag }}
