@@ -28,10 +28,12 @@ jobs:
           ref: ${{ inputs.tag }}
       - name: Prepare
         run: |
-          sudo apt install -y gcc-aarch64-linux-musl protobuf-compiler
+          sudo apt install -y musl-tools protobuf-compiler
+          wget https://musl.cc/aarch64-linux-musl-cross.tgz
+          tar -xvzf aarch64-linux-musl-cross.tgz
           mkdir .cargo
           echo [target.aarch64-unknown-linux-musl] >> .cargo/config.toml
-          echo 'linker = "aarch64-linux-musl-gcc"' >> .cargo/config.toml
+          echo 'linker = "./aarch64-linux-musl-cross/bin/aarch64-linux-musl-gcc"' >> .cargo/config.toml
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
         with:
