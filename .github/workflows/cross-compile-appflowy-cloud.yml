@@ -16,10 +16,10 @@ jobs:
         include:
           - name: linux-amd64
             runner: ubuntu-20.04
-            target: x86_64-unknown-linux-gnu
+            target: x86_64-unknown-linux-musl
           - name: linux-arm64
             runner: ubuntu-20.04
-            target: aarch64-unknown-linux-gnu
+            target: aarch64-unknown-linux-musl
     steps:
       - name: Checkout AppFlowy Cloud
         uses: actions/checkout@v4
@@ -28,10 +28,10 @@ jobs:
           ref: ${{ inputs.tag }}
       - name: Prepare
         run: |
-          sudo apt install -y gcc-aarch64-linux-gnu protobuf-compiler
+          sudo apt install -y gcc-aarch64-linux-musl protobuf-compiler
           mkdir .cargo
-          echo [target.aarch64-unknown-linux-gnu] >> .cargo/config.toml
-          echo 'linker = "aarch64-linux-gnu-gcc"' >> .cargo/config.toml
+          echo [target.aarch64-unknown-linux-musl] >> .cargo/config.toml
+          echo 'linker = "aarch64-linux-musl-gcc"' >> .cargo/config.toml
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
         with:
