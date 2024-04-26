@@ -1,10 +1,10 @@
 ARG BUILD_FROM
 FROM $BUILD_FROM as build
 WORKDIR /appflowy_cloud
-RUN apk add --no-cache git=2.43.0-r0
+RUN apk add --no-cache git
 RUN git clone https://github.com/AppFlowy-IO/AppFlowy-Cloud.git --depth 1 --branch 0.3.26
 WORKDIR /gotrue
-RUN apk add --no-cache go=1.21.9-r0
+RUN apk add --no-cache go
 RUN git clone https://github.com/supabase/gotrue.git --depth 1 --branch v2.117.0
 WORKDIR /gotrue/gotrue
 RUN cp /appflowy_cloud/AppFlowy-Cloud/docker/gotrue.patch .
@@ -14,13 +14,13 @@ RUN go build -o /gotrue/gotrue/build/gotrue .
 
 FROM $BUILD_FROM
 # add redis
-RUN apk add --no-cache redis=7.2.4-r0
+RUN apk add --no-cache redis
 # add postgresql
-RUN apk add --no-cache postgresql13=13.14-r0 postgresql13-contrib==13.14-r0
+RUN apk add --no-cache postgresql13 postgresql13-contrib
 # add minio
-RUN apk add --no-cache minio=0.20240131.202033-r2
+RUN apk add --no-cache minio
 # add nginx
-RUN apk add --no-cache nginx=1.24.0-r15
+RUN apk add --no-cache nginx
 # add gotrue
 RUN mkdir /gotrue
 COPY --from=build /gotrue/gotrue/build/gotrue /gotrue
