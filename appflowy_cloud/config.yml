@@ -1,8 +1,8 @@
-name: "AppFlowy Cloud"
-description: "AppFlowy Cloud"
-version: "0.3.26"
-slug: "appflowy_cloud"
-image: "ghcr.io/silviomessi/hassio-addons/appflowy_cloud"
+name: AppFlowy Cloud
+description: AppFlowy Cloud
+version: 0.3.26
+slug: appflowy_cloud
+image: ghcr.io/silviomessi/hassio-addons/appflowy_cloud
 init: false
 environment:
   # gotrue
@@ -33,10 +33,10 @@ environment:
   ADMIN_FRONTEND_GOTRUE_URL: http://localhost:9999
   ADMIN_FRONTEND_APPFLOWY_CLOUD_URL: http://localhost:8000
 options:
-  secret: "change_me"
+  secret: change_me
 schema:
   secret: str
-webui: "[PROTO:ssl]://[HOST]:[PORT:80]"
+webui: [PROTO:ssl]://[HOST]:[PORT:80]
 ports:
   8080/tcp: 1993
 arch:
