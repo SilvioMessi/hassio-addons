@@ -1,11 +1,44 @@
-name: "Hello world"
-description: "My first real add-on!"
-version: "1.0.0"
-slug: "hello_world"
+name: "AppFlowy Cloud"
+description: "AppFlowy Cloud"
+version: "0.3.26"
+slug: "appflowy_cloud"
+image: "ghcr.io/silviomessi/hassio-addons/appflowy_cloud"
 init: false
+environment:
+  # gotrue
+  API_EXTERNAL_URL: http://localhost
+  GOTRUE_DB_DRIVER: postgres
+  DATABASE_URL: postgres://supabase_auth_admin:root@localhost:5432/postgres
+  GOTRUE_SITE_URL: appflowy-flutter://
+  GOTRUE_JWT_SECRET: change_me
+  PORT: "9999"
+  # appflowy cloud
+  RUST_LOG: info
+  APPFLOWY_ENVIRONMENT: production
+  APPFLOWY_DATABASE_URL: postgres://postgres:password@localhost:5432/postgres
+  APPFLOWY_REDIS_URI: redis://localhost:6379
+  APPFLOWY_GOTRUE_JWT_SECRET: change_me
+  APPFLOWY_GOTRUE_JWT_EXP: "7200"
+  APPFLOWY_GOTRUE_BASE_URL: http://localhost:9999
+  APPFLOWY_GOTRUE_EXT_URL: http://localhost
+  APPFLOWY_GOTRUE_ADMIN_EMAIL: admin@example.com
+  APPFLOWY_GOTRUE_ADMIN_PASSWORD: password
+  APPFLOWY_S3_USE_MINIO: "true"
+  APPFLOWY_S3_MINIO_URL: http://localhost:9000
+  APPFLOWY_S3_ACCESS_KEY: minioadmin
+  APPFLOWY_S3_SECRET_KEY: minioadmin
+  APPFLOWY_S3_BUCKET: appflowy
+  APPFLOWY_ACCESS_CONTROL: "true"
+  ADMIN_FRONTEND_REDIS_URL: redis://localhost:6379
+  ADMIN_FRONTEND_GOTRUE_URL: http://localhost:9999
+  ADMIN_FRONTEND_APPFLOWY_CLOUD_URL: http://localhost:8000
+options:
+  secret: "change_me"
+schema:
+  secret: str
+webui: "[PROTO:ssl]://[HOST]:[PORT:80]"
+ports:
+  8080/tcp: 1993
 arch:
   - aarch64
   - amd64
-  - armhf
-  - armv7
-  - i386
