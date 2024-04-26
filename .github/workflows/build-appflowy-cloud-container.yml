@@ -58,6 +58,10 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository }}/appflowy_cloud-${{ matrix.arch }}
           tags: ${{ inputs.tag }}
+          labels: |
+            io.hass.arch="${{ matrix.arch }}"
+            io.hass.type="addon"
+            io.hass.version="${{ inputs.tag }}"
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
@@ -67,3 +71,4 @@ jobs:
           build-args: BUILD_FROM=ghcr.io/home-assistant/${{ matrix.arch }}-base:3.19
           platforms: ${{ matrix.platform }}
           tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
