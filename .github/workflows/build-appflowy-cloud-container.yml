@@ -56,7 +56,7 @@ jobs:
         uses: home-assistant/builder@master
         with:
           args: |
-          --${{ matrix.arch }} \
-          --target appflowy_cloud \
-          --docker-hub ghcr.io/${{ github.repository }} \
-          --addon
+            --${{ matrix.arch }} \
+            --target appflowy_cloud \
+            --docker-hub ghcr.io/${{ github.repository }} \
+            --addon
