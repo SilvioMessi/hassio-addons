@@ -11,6 +11,7 @@ WORKDIR /appflowy_cloud/AppFlowy-Cloud
 ENV RUST_BACKTRACE=1
 ENV OPENSSL_NO_VENDOR=Y
 ENV PROTOC=/usr/bin/protoc
+RUN rm /appflowy_cloud/AppFlowy-Cloud/libs/collab-rt-entity/build.rs
 RUN cargo build --release --bin appflowy_cloud
 WORKDIR /appflowy_cloud/AppFlowy-Cloud/admin_frontend
 RUN cargo build --release --bin admin_frontend
