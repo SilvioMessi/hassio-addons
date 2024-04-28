@@ -36,9 +36,9 @@ options:
   secret: change_me
 schema:
   secret: str
-webui: "[PROTO:ssl]://[HOST]:[PORT:8080]"
+webui: "http://[HOST]:[PORT:80]"
 ports:
-  8080/tcp: 1993
+  80/tcp: 1993
 arch:
   - aarch64
   - amd64
