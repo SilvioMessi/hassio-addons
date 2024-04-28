@@ -36,10 +36,8 @@ COPY --from=build /gotrue/gotrue/build/gotrue /gotrue
 COPY --from=build /gotrue/gotrue/migrations /gotrue/migrations
 # add appflowy cloud
 RUN mkdir /appflowy_cloud
-COPY appflowy_cloud /appflowy_cloud
-RUN chmod +x /appflowy_cloud/appflowy_cloud
-COPY admin_frontend /appflowy_cloud
-RUN chmod +x /appflowy_cloud/admin_frontend
+COPY --from=build /appflowy_cloud/AppFlowy-Cloud/target/release/appflowy_cloud /appflowy_cloud
+COPY --from=build /appflowy_cloud/AppFlowy-Cloud/target/release/admin_frontend /appflowy_cloud
 COPY --from=build /appflowy_cloud/AppFlowy-Cloud/admin_frontend/assets /appflowy_cloud/assets
 COPY --from=build /appflowy_cloud/AppFlowy-Cloud/migrations/before /appflowy_cloud
 # setup postgresql
