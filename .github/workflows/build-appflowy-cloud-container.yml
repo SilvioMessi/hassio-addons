@@ -1,11 +1,5 @@
 name: Build AppFlowy Cloud container
-on:
-  workflow_dispatch:
-    inputs:
-      tag:
-        description: "AppFlowy Cloud tag"
-        required: true
-        type: string
+on: push
 permissions:
   contents: read
   packages: write

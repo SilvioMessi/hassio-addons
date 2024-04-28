@@ -1,11 +1,11 @@
 ARG BUILD_FROM
-ARG BUILD_VERSION
 FROM $BUILD_FROM as build
 RUN apk add --no-cache git
 RUN apk add --no-cache openssl-dev
 RUN apk add --no-cache protobuf-dev
 RUN apk add --no-cache cargo
 WORKDIR /appflowy_cloud
+ARG BUILD_VERSION
 RUN git clone https://github.com/AppFlowy-IO/AppFlowy-Cloud.git --depth 1 --branch $BUILD_VERSION
 WORKDIR /appflowy_cloud/AppFlowy-Cloud
 ENV RUST_BACKTRACE=1 
