@@ -1,45 +1,19 @@
 name: Build AppFlowy Cloud container
-on:
-  workflow_dispatch:
-    inputs:
-      tag:
-        description: "AppFlowy Cloud tag"
-        required: true
-        type: string
+on: push
 permissions:
   contents: read
   packages: write
 jobs:
   build-appflowy-cloud-container:
-    runs-on: ${{ matrix.runner }}
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         include:
-          - name: linux-amd64
-            runner: ubuntu-latest
-            rust_target: x86_64-unknown-linux-musl
-            platfom: linux/amd64
-            arch: amd64
-          - name: linux-arm64
-            runner: ubuntu-latest
-            rust_target: aarch64-unknown-linux-musl
-            platfom: linux/arm64
-            arch: aarch64
+          - arch: amd64
+          - arch: aarch64
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Download Appflowy Cloud
-        uses: robinraju/release-downloader@v1.10
-        with:
-          tag: ${{ matrix.rust_target }}-appflowy_cloud-${{ inputs.tag }}
-          fileName: appflowy_cloud
-          out-file-path: appflowy_cloud/appflowy_cloud
-      - name: Download Admin Fronted
-        uses: robinraju/release-downloader@v1.10
-        with:
-          tag: ${{ matrix.rust_target }}-admin_frontend-${{ inputs.tag }}
-          fileName: admin_frontend
-          out-file-path: appflowy_cloud/admin_frontend
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
