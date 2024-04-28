@@ -10,6 +10,7 @@ RUN git clone https://github.com/AppFlowy-IO/AppFlowy-Cloud.git --depth 1 --bran
 WORKDIR /appflowy_cloud/AppFlowy-Cloud
 ENV RUST_BACKTRACE=1
 ENV OPENSSL_NO_VENDOR=Y
+ENV PROTOC=/usr/bin/protoc
 RUN cargo build --release --bin appflowy_cloud
 WORKDIR /appflowy_cloud/AppFlowy-Cloud/admin_frontend
 RUN cargo build --release --bin admin_frontend
