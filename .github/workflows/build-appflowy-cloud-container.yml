@@ -5,20 +5,12 @@ permissions:
   packages: write
 jobs:
   build-appflowy-cloud-container:
-    runs-on: ${{ matrix.runner }}
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         include:
-          - name: linux-amd64
-            runner: ubuntu-latest
-            rust_target: x86_64-unknown-linux-musl
-            platfom: linux/amd64
-            arch: amd64
-          - name: linux-arm64
-            runner: ubuntu-latest
-            rust_target: aarch64-unknown-linux-musl
-            platfom: linux/arm64
-            arch: aarch64
+          - arch: amd64
+          - arch: aarch64
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -35,4 +27,5 @@ jobs:
             --${{ matrix.arch }} \
             --target appflowy_cloud \
             --docker-hub ghcr.io/${{ github.repository }} \
+            --build-from ghcr.io/home-assistant/${{ matrix.arch }}-base:latest \
             --addon
