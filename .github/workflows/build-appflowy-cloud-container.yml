@@ -27,5 +27,4 @@ jobs:
             --${{ matrix.arch }} \
             --target appflowy_cloud \
             --docker-hub ghcr.io/${{ github.repository }} \
-            --build-from ghcr.io/home-assistant/${{ matrix.arch }}-base:latest \
             --addon
