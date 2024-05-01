@@ -45,8 +45,8 @@ jobs:
           context: appflowy_cloud
           file: appflowy_cloud/Dockerfile.build
           push: true
-          build-args: 
-            - BUILD_FROM=ghcr.io/home-assistant/${{ matrix.arch }}-base:3.19
-            - BUILD_VERSION=${{ steps.meta.outputs.tags }}
+          build-args: |
+            BUILD_FROM=ghcr.io/home-assistant/${{ matrix.arch }}-base:3.19
+            BUILD_VERSION=${{ steps.meta.outputs.tags }}
           platforms: ${{ matrix.platform }}
           tags: ${{ steps.meta.outputs.tags }}
