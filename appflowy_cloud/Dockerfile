@@ -1,21 +1,9 @@
 ARG BUILD_FROM
-FROM $BUILD_FROM as build
-RUN apk add --no-cache git
-RUN apk add --no-cache openssl-dev
-RUN apk add --no-cache protobuf-dev
-RUN apk add --no-cache cargo
-WORKDIR /appflowy_cloud
 ARG BUILD_VERSION
+FROM $BUILD_FROM as build
+WORKDIR /appflowy_cloud
+RUN apk add --no-cache git
 RUN git clone https://github.com/AppFlowy-IO/AppFlowy-Cloud.git --depth 1 --branch $BUILD_VERSION
-WORKDIR /appflowy_cloud/AppFlowy-Cloud
-ENV RUST_BACKTRACE=1
-ENV OPENSSL_NO_VENDOR=Y
-ENV PROTOC=/usr/bin/protoc
-ENV SQLX_OFFLINE=true
-RUN rm /appflowy_cloud/AppFlowy-Cloud/libs/collab-rt-entity/build.rs
-RUN cargo build --release --bin appflowy_cloud
-WORKDIR /appflowy_cloud/AppFlowy-Cloud/admin_frontend
-RUN cargo build --release --bin admin_frontend
 WORKDIR /gotrue
 RUN apk add --no-cache go
 RUN git clone https://github.com/supabase/gotrue.git --depth 1 --branch v2.117.0
@@ -40,17 +28,20 @@ COPY --from=build /gotrue/gotrue/build/gotrue /gotrue
 COPY --from=build /gotrue/gotrue/migrations /gotrue/migrations
 # add appflowy cloud
 RUN mkdir /appflowy_cloud
-COPY --from=build /appflowy_cloud/AppFlowy-Cloud/target/release/appflowy_cloud /appflowy_cloud
-COPY --from=build /appflowy_cloud/AppFlowy-Cloud/target/release/admin_frontend /appflowy_cloud
+COPY appflowy_cloud /appflowy_cloud
+RUN chmod +x /appflowy_cloud/appflowy_cloud
+COPY admin_frontend /appflowy_cloud
+RUN chmod +x /appflowy_cloud/admin_frontend
 COPY --from=build /appflowy_cloud/AppFlowy-Cloud/admin_frontend/assets /appflowy_cloud/assets
 COPY --from=build /appflowy_cloud/AppFlowy-Cloud/migrations/before /appflowy_cloud
 # setup postgresql
 # https://luppeng.wordpress.com/2020/02/28/install-and-start-postgresql-on-alpine-linux/
 RUN mkdir /run/postgresql
 RUN chown postgres:postgres /run/postgresql/
+RUN mkdir -p /data/postgresql
+RUN chown postgres:postgres /data/postgresql
 USER postgres
-RUN mkdir /var/lib/postgresql/data
-RUN initdb -D /var/lib/postgresql/data
+RUN initdb -D /data/postgresql
 USER root
 # setup nginx
 COPY nginx.conf /etc/nginx/nginx.conf

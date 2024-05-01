@@ -1,7 +1,12 @@
 name: Build AppFlowy Cloud container
-on: push
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "AppFlowy Cloud tag"
+        required: true
+        type: string
 permissions:
-  contents: read
   packages: write
 jobs:
   build-appflowy-cloud-container:
@@ -14,6 +19,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Download Appflowy Cloud
+        uses: robinraju/release-downloader@v1.10
+        with:
+          tag: ${{ matrix.rust_target }}-appflowy_cloud-${{ inputs.tag }}
+          fileName: appflowy_cloud
+          out-file-path: appflowy_cloud/appflowy_cloud
+      - name: Download Admin Fronted
+        uses: robinraju/release-downloader@v1.10
+        with:
+          tag: ${{ matrix.rust_target }}-admin_frontend-${{ inputs.tag }}
+          fileName: admin_frontend
+          out-file-path: appflowy_cloud/admin_frontend
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
