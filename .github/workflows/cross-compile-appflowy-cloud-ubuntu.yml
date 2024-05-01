@@ -1,4 +1,4 @@
-name: (Cross)Compile AppFlowy Cloud
+name: (Cross)Compile AppFlowy Cloud with Ubuntu
 on:
   workflow_dispatch:
     inputs:

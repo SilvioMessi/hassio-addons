@@ -1,0 +1,26 @@
+ARG BUILD_FROM
+FROM $BUILD_FROM
+RUN apk add --no-cache git
+RUN apk add --no-cache openssl-dev
+RUN apk add --no-cache protobuf-dev
+RUN apk add --no-cache cargo
+WORKDIR /appflowy_cloud
+ARG BUILD_VERSION
+RUN git clone https://github.com/AppFlowy-IO/AppFlowy-Cloud.git --depth 1 --branch $BUILD_VERSION
+WORKDIR /appflowy_cloud/AppFlowy-Cloud
+ENV RUST_BACKTRACE=1
+ENV OPENSSL_NO_VENDOR=Y
+ENV PROTOC=/usr/bin/protoc
+ENV SQLX_OFFLINE=true
+RUN rm /appflowy_cloud/AppFlowy-Cloud/libs/collab-rt-entity/build.rs
+RUN cargo build --release --bin appflowy_cloud
+WORKDIR /appflowy_cloud/AppFlowy-Cloud/admin_frontend
+RUN cargo build --release --bin admin_frontend
+WORKDIR /gotrue
+RUN apk add --no-cache go
+RUN git clone https://github.com/supabase/gotrue.git --depth 1 --branch v2.117.0
+WORKDIR /gotrue/gotrue
+RUN cp /appflowy_cloud/AppFlowy-Cloud/docker/gotrue.patch .
+RUN git apply gotrue.patch
+ENV CGO_ENABLED=0
+RUN go build -o /gotrue/gotrue/build/gotrue .
