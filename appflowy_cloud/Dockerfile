@@ -1,8 +1,8 @@
 ARG BUILD_FROM
-ARG BUILD_VERSION
 FROM $BUILD_FROM as build
 WORKDIR /appflowy_cloud
 RUN apk add --no-cache git
+ARG BUILD_VERSION
 RUN git clone https://github.com/AppFlowy-IO/AppFlowy-Cloud.git --depth 1 --branch $BUILD_VERSION
 WORKDIR /gotrue
 RUN apk add --no-cache go
