@@ -38,11 +38,6 @@ COPY --from=build /appflowy_cloud/AppFlowy-Cloud/migrations/before /appflowy_clo
 # https://luppeng.wordpress.com/2020/02/28/install-and-start-postgresql-on-alpine-linux/
 RUN mkdir /run/postgresql
 RUN chown postgres:postgres /run/postgresql/
-RUN mkdir -p /data/postgresql
-RUN chown postgres:postgres /data/postgresql
-USER postgres
-RUN initdb -D /data/postgresql
-USER root
 # setup nginx
 COPY nginx.conf /etc/nginx/nginx.conf
 # add entrypoint script
