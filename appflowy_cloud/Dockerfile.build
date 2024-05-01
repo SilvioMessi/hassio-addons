@@ -1,4 +1,5 @@
 ARG BUILD_FROM
+ARG BUILD_VERSION
 FROM $BUILD_FROM
 RUN apk add --no-cache git
 RUN apk add --no-cache openssl-dev
