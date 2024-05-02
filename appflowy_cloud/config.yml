@@ -38,7 +38,7 @@ schema:
   secret: str
 webui: "http://[HOST]:[PORT:80]"
 ports:
-  80/tcp: 1993
+  80/tcp: 80
 arch:
   - aarch64
   - amd64

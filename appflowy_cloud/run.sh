@@ -2,8 +2,8 @@
 if [ ! -d /data/postgresql ]; then
     mkdir -p /data/postgresql
     chown postgres:postgres /data/postgresql
-    su postgres -c 'initdb -D /data/postgresql'
 fi
+su postgres -c 'initdb -D /data/postgresql'
 su postgres -c 'pg_ctl start -D /data/postgresql'
 su postgres -c 'psql -f /appflowy_cloud/20230312043000_supabase_auth.sql'
 redis-server &
