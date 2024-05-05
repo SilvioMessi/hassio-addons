@@ -10,19 +10,15 @@ environment:
   GOTRUE_DB_DRIVER: postgres
   DATABASE_URL: postgres://supabase_auth_admin:root@localhost:5432/postgres
   GOTRUE_SITE_URL: appflowy-flutter://
-  GOTRUE_JWT_SECRET: change_me
   PORT: "9999"
   # appflowy cloud
   RUST_LOG: info
   APPFLOWY_ENVIRONMENT: production
   APPFLOWY_DATABASE_URL: postgres://postgres:password@localhost:5432/postgres
   APPFLOWY_REDIS_URI: redis://localhost:6379
-  APPFLOWY_GOTRUE_JWT_SECRET: change_me
   APPFLOWY_GOTRUE_JWT_EXP: "7200"
   APPFLOWY_GOTRUE_BASE_URL: http://localhost:9999
   APPFLOWY_GOTRUE_EXT_URL: http://localhost
-  APPFLOWY_GOTRUE_ADMIN_EMAIL: admin@example.com
-  APPFLOWY_GOTRUE_ADMIN_PASSWORD: password
   APPFLOWY_S3_USE_MINIO: "true"
   APPFLOWY_S3_MINIO_URL: http://localhost:9000
   APPFLOWY_S3_ACCESS_KEY: minioadmin
@@ -33,9 +29,13 @@ environment:
   ADMIN_FRONTEND_GOTRUE_URL: http://localhost:9999
   ADMIN_FRONTEND_APPFLOWY_CLOUD_URL: http://localhost:8000
 options:
-  secret: change_me
+  SECRET: change_me
+  ADMIN_EMAIL: admin@example.com
+  ADMIN_PASSWORD: password
 schema:
-  secret: str
+  SECRET: password
+  ADMIN_EMAIL: email
+  ADMIN_PASSWORD: password
 webui: "http://[HOST]:[PORT:80]"
 ports:
   80/tcp: 80

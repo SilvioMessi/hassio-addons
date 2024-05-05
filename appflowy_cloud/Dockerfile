@@ -43,4 +43,4 @@ COPY nginx.conf /etc/nginx/nginx.conf
 # add entrypoint script
 COPY run.sh run.sh
 RUN chmod +x run.sh
-ENTRYPOINT ["sh", "run.sh"]
+ENTRYPOINT ["bashio", "run.sh"]
