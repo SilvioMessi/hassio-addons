@@ -24,7 +24,6 @@ LOG_FOLDER=/data/logs
 
 bashio::log.info "Set SECRET"
 SECRET="$(bashio::config 'SECRET')"
-SECRET=change_me
 export GOTRUE_JWT_SECRET=$SECRET
 export APPFLOWY_GOTRUE_JWT_SECRET=$SECRET
 
@@ -32,8 +31,6 @@ bashio::log.info "Set ADMIN_EMAIL and ADMIN_PASSWORD"
 bashio::log.warning "This only takes effect during the initial startup. Once the database is initialized, only the password can be changed via the web UI"
 ADMIN_EMAIL="$(bashio::config 'ADMIN_EMAIL')"
 ADMIN_PASSWORD="$(bashio::config 'ADMIN_PASSWORD')"
-ADMIN_EMAIL='admin@example.com'
-ADMIN_PASSWORD='password'
 export APPFLOWY_GOTRUE_ADMIN_EMAIL=$ADMIN_EMAIL
 export APPFLOWY_GOTRUE_ADMIN_PASSWORD=$ADMIN_PASSWORD
 
