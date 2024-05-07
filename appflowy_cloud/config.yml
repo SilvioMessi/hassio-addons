@@ -1,6 +1,6 @@
 name: AppFlowy Cloud
 description: AppFlowy Cloud
-version: 0.4.1
+version: 0.4.3
 slug: appflowy_cloud
 image: ghcr.io/silviomessi/hassio-addons/appflowy_cloud-{arch}
 init: false
