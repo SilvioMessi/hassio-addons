@@ -2,7 +2,7 @@ name: AppFlowy Cloud
 description: AppFlowy Cloud
 version: 0.4.8
 slug: appflowy_cloud
-url: https://github.com/SilvioMessi/hassio-addons/tree/main/appflowy_cloud
+url: "https://github.com/SilvioMessi/hassio-addons/tree/main/appflowy_cloud"
 image: ghcr.io/silviomessi/hassio-addons/appflowy_cloud-{arch}
 init: false
 environment:
