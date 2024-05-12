@@ -21,7 +21,7 @@ jobs:
           tag: ${{ steps.get-version.outputs.result }}
       - run: |
           echo "Tag ${{steps.get-version.outputs.result}} already exists!"
-          exit 0
+          exit 1
         if: steps.check-tag.outputs.exists == 'true'
   cross-compile-appflowy-cloud-ubuntu:
     needs: get-tag
