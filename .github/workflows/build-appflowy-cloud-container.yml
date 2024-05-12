@@ -3,6 +3,23 @@ on: push
 permissions:
   packages: write
 jobs:
+  check_tag:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.get_version.outputs.result }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Get version from config.yml
+        id: get-version
+        uses: mikefarah/yq@master
+        with:
+          cmd: yq .version appflowy_cloud/config.yml
+  cross-compile-appflowy-cloud-ubuntu:
+    needs: check_tag
+    uses: ./.github/workflows/cross-compile-appflowy-cloud-ubuntu.yml
+    with:
+      tag: ${{needs.check_tag.outputs.tag}}
   build-appflowy-cloud-container:
     runs-on: ubuntu-latest
     strategy:
@@ -12,18 +29,7 @@ jobs:
             arch: amd64
           - target: aarch64-unknown-linux-musl
             arch: aarch64
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Get version from config.yml
-        id: get-version
-        uses: mikefarah/yq@master
-        with:
-          cmd: yq .version appflowy_cloud/config.yml
-      - name: cross-compile-appflowy-cloud-ubuntu
-        uses: ./.github/workflows/cross-compile-appflowy-cloud-ubuntu.yml
-        with:
-          tag: ${{ steps.get-version.outputs.result }}
+    
       - name: Download Appflowy Cloud
         uses: actions/download-artifact@master
         with:
