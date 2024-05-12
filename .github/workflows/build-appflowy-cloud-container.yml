@@ -19,7 +19,7 @@ jobs:
         id: get-version
         uses: mikefarah/yq@master
         with:
-          cmd: yq 'version' appflowy_cloud/config.yml
+          cmd: yq .version appflowy_cloud/config.yml
       - name: cross-compile-appflowy-cloud-ubuntu
         uses: ./.github/workflows/cross-compile-appflowy-cloud-ubuntu.yml
         with:
