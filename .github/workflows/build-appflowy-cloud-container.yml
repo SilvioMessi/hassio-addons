@@ -22,6 +22,7 @@ jobs:
       tag: ${{needs.check_tag.outputs.tag}}
   build-appflowy-cloud-container:
     runs-on: ubuntu-latest
+    needs: check_tag
     strategy:
       matrix:
         include:
@@ -33,12 +34,12 @@ jobs:
       - name: Download Appflowy Cloud
         uses: actions/download-artifact@master
         with:
-          name: ${{ matrix.target }}-appflowy_cloud-${{ steps.get-version.outputs.result }}
+          name: ${{ matrix.target }}-appflowy_cloud-${{needs.check_tag.outputs.tag}}
           path: appflowy_cloud/appflowy_cloud
       - name: Download Admin Fronted
         uses: actions/download-artifact@master
         with:
-          name: ${{ matrix.target }}-admin_frontend-${{ steps.get-version.outputs.result }}
+          name: ${{ matrix.target }}-admin_frontend-${{needs.check_tag.outputs.tag}}
           path: appflowy_cloud/admin_frontend
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3

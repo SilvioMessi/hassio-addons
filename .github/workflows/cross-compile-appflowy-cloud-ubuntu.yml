@@ -12,17 +12,14 @@ on:
         description: "AppFlowy Cloud tag"
         required: true
         type: string
-
-permissions:
-  contents: write
 jobs:
   cross-compile-appflowy-cloud:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
         include:
-            - target: x86_64-unknown-linux-musl
-            - target: aarch64-unknown-linux-musl
+          - target: x86_64-unknown-linux-musl
+          - target: aarch64-unknown-linux-musl
     steps:
       - name: Checkout AppFlowy Cloud
         uses: actions/checkout@v4
