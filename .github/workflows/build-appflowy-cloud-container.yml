@@ -1,11 +1,5 @@
 name: Build AppFlowy Cloud container
-on:
-  workflow_dispatch:
-    inputs:
-      tag:
-        description: "AppFlowy Cloud tag"
-        required: true
-        type: string
+on: push
 permissions:
   packages: write
 jobs:
@@ -14,25 +8,32 @@ jobs:
     strategy:
       matrix:
         include:
-          - rust_target: x86_64-unknown-linux-musl
+          - target: x86_64-unknown-linux-musl
             arch: amd64
-          - rust_target: aarch64-unknown-linux-musl
+          - target: aarch64-unknown-linux-musl
             arch: aarch64
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Get version from config.yml
+        id: get-version
+        uses: mikefarah/yq@master
+        with:
+          cmd: yq version appflowy_cloud/config.yml
+      - name: cross-compile-appflowy-cloud-ubuntu
+        uses: ./.github/workflows/cross-compile-appflowy-cloud-ubuntu.yml
+        with:
+          tag: ${{ steps.get-version.outputs.result }}
       - name: Download Appflowy Cloud
-        uses: robinraju/release-downloader@v1.10
+        uses: actions/download-artifact@master
         with:
-          tag: ${{ matrix.rust_target }}-appflowy_cloud-${{ inputs.tag }}
-          fileName: appflowy_cloud
-          out-file-path: appflowy_cloud/appflowy_cloud
+          name: ${{ matrix.target }}-appflowy_cloud-${{ steps.get-version.outputs.result }}
+          path: appflowy_cloud/appflowy_cloud
       - name: Download Admin Fronted
-        uses: robinraju/release-downloader@v1.10
+        uses: actions/download-artifact@master
         with:
-          tag: ${{ matrix.rust_target }}-admin_frontend-${{ inputs.tag }}
-          fileName: admin_frontend
-          out-file-path: appflowy_cloud/admin_frontend
+          name: ${{ matrix.target }}-admin_frontend-${{ steps.get-version.outputs.result }}
+          path: appflowy_cloud/admin_frontend
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
