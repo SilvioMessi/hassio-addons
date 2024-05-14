@@ -29,7 +29,6 @@ export GOTRUE_JWT_SECRET=$SECRET
 export APPFLOWY_GOTRUE_JWT_SECRET=$SECRET
 
 bashio::log.info "Set ADMIN_EMAIL and ADMIN_PASSWORD"
-bashio::log.warning "This only takes effect during the first startup. Once the database is initialized, only the password can be changed via the admin panel"
 ADMIN_EMAIL="$(bashio::config 'ADMIN_EMAIL')"
 ADMIN_PASSWORD="$(bashio::config 'ADMIN_PASSWORD')"
 export APPFLOWY_GOTRUE_ADMIN_EMAIL=$ADMIN_EMAIL

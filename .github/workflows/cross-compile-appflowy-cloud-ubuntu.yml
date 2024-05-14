@@ -6,20 +6,20 @@ on:
         description: "AppFlowy Cloud tag"
         required: true
         type: string
-permissions:
-  contents: write
+  workflow_call:
+    inputs:
+      tag:
+        description: "AppFlowy Cloud tag"
+        required: true
+        type: string
 jobs:
   cross-compile-appflowy-cloud:
-    runs-on: ${{ matrix.runner }}
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         include:
-          - name: linux-amd64
-            runner: ubuntu-22.04
-            target: x86_64-unknown-linux-musl
-          - name: linux-arm64
-            runner: ubuntu-22.04
-            target: aarch64-unknown-linux-musl
+          - target: x86_64-unknown-linux-musl
+          - target: aarch64-unknown-linux-musl
     steps:
       - name: Checkout AppFlowy Cloud
         uses: actions/checkout@v4
@@ -45,7 +45,7 @@ jobs:
       - name: Upload Appflowy Cloud
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.target }}-appflowy_cloud
+          name: ${{ matrix.target }}-appflowy_cloud-${{ inputs.tag }}
           path: target/${{ matrix.target }}/release/appflowy_cloud
       - name: Build Admin Fronted
         run: |
@@ -55,17 +55,5 @@ jobs:
       - name: Upload Admin Fronted
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.target }}-admin_frontend
+          name: ${{ matrix.target }}-admin_frontend-${{ inputs.tag }}
           path: target/${{ matrix.target }}/release/admin_frontend
-      - name: Relese Appflowy Cloud
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: target/${{ matrix.target }}/release/appflowy_cloud
-          tag: ${{ matrix.target }}-appflowy_cloud-${{ inputs.tag }}
-          allowUpdates: true
-      - name: Relese Admin Fronted
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: target/${{ matrix.target }}/release/admin_frontend
-          tag: ${{ matrix.target }}-admin_frontend-${{ inputs.tag }}
-          allowUpdates: true
