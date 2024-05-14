@@ -15,11 +15,13 @@ jobs:
         uses: mikefarah/yq@master
         with:
           cmd: yq .version appflowy_cloud/config.yml
-      - uses: mukunku/tag-exists-action@v1.6.0
+      - name: Check it tag exists
+        uses: mukunku/tag-exists-action@v1.6.0
         id: check-tag
         with:
           tag: ${{ steps.get-version.outputs.result }}
-      - run: |
+      - name: Exit because tag already exists
+        run: |
           echo "Tag ${{steps.get-version.outputs.result}} already exists!"
           exit 1
         if: steps.check-tag.outputs.exists == 'true'
@@ -63,3 +65,8 @@ jobs:
             --target appflowy_cloud \
             --docker-hub ghcr.io/${{ github.repository }} \
             --addon
+      - name: Push tag
+        uses: laputansoft/github-tag-action@v4.6
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{needs.get-tag.outputs.tag}}
