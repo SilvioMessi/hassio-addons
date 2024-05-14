@@ -41,6 +41,8 @@ jobs:
           - target: aarch64-unknown-linux-musl
             arch: aarch64
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Download Appflowy Cloud
         uses: actions/download-artifact@master
         with:
