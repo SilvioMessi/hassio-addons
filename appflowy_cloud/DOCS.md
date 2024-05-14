@@ -18,12 +18,12 @@ Authentication key, change this and keep the key safe and secret.
 
 This admin user will be created when AppFlowy Cloud starts successfully.  
 You can use this user to login to the admin panel.  
-This only takes effect during the first startup. Once the database is initialized, admin user email cannot be changed.
+Every time you change this email a new admin user will be created (if the email does not already exist in the database).
 
 ### Option: `ADMIN_PASSWORD` (required)
 
 Admin user password.  
-After the first startup the password can be changed via the admin panel.
+This only takes effect the first time the new admin user is create. Once the user is created the password can be changed in the admin panel.
 
 ## Support
 
