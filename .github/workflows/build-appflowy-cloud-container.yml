@@ -5,6 +5,7 @@ on:
       - main
 permissions:
   packages: write
+  contents: write
 jobs:
   get-tag:
     runs-on: ubuntu-latest
