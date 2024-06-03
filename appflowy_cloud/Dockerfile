@@ -12,12 +12,22 @@ RUN cp /appflowy_cloud/AppFlowy-Cloud/docker/gotrue.patch .
 RUN git apply gotrue.patch
 ENV CGO_ENABLED=0
 RUN go build -o /gotrue/gotrue/build/gotrue .
+WORKDIR /pgvector
+RUN apk add --no-cache build-base
+RUN apk add --no-cache postgresql16-dev
+RUN git clone --branch v0.7.0  https://github.com/pgvector/pgvector.git
+WORKDIR /pgvector/pgvector
+RUN make
+RUN make install
 
 FROM $BUILD_FROM
 # add redis
 RUN apk add --no-cache redis
 # add postgresql
-RUN apk add --no-cache postgresql13 postgresql13-contrib
+RUN apk add --no-cache postgresql16 postgresql16-contrib
+COPY --from=build /usr/lib/postgresql16/bitcode/vector.index.bc /usr/lib/postgresql16/bitcode/vector.index.bc
+COPY --from=build /usr/lib/postgresql16/vector.so /usr/lib/postgresql16/vector.so
+COPY --from=build /usr/share/postgresql16/extension /usr/share/postgresql16/extension
 # add minio
 RUN apk add --no-cache minio
 # add nginx
@@ -43,4 +53,5 @@ COPY nginx.conf /etc/nginx/nginx.conf
 # add entrypoint script
 COPY run.sh run.sh
 RUN chmod +x run.sh
-ENTRYPOINT ["bashio", "run.sh"]
+#ENTRYPOINT ["bashio", "run.sh"]
+ENTRYPOINT ["tail", "-f", "/dev/null"]
