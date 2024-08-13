@@ -64,7 +64,7 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push
-        uses: home-assistant/builder@master
+        uses: home-assistant/builder@2024.03.5
         with:
           args: |
             --${{ matrix.arch }} \
