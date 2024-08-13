@@ -1,5 +1,5 @@
 ARG BUILD_FROM
-FROM $BUILD_FROM as build
+FROM $BUILD_FROM AS build
 WORKDIR /appflowy_cloud
 RUN apk add --no-cache git
 ARG BUILD_VERSION
