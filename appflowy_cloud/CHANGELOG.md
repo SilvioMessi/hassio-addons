@@ -1,3 +1,8 @@
+## 0.5.52
+
+- Bump to version 0.5.52
+- Update nginx.conf
+
 ## 0.5.24
 
 - Bump to version 0.5.24
