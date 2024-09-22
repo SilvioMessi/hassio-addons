@@ -6,8 +6,8 @@ ARG BUILD_VERSION
 RUN git clone https://github.com/AppFlowy-IO/AppFlowy-Cloud.git --depth 1 --branch $BUILD_VERSION
 WORKDIR /gotrue
 RUN apk add --no-cache go
-RUN git clone https://github.com/supabase/gotrue.git --depth 1 --branch v2.117.0
-WORKDIR /gotrue/gotrue
+RUN git clone https://github.com/supabase/auth.git --depth 1 --branch v2.159.1
+WORKDIR /gotrue/auth
 RUN cp /appflowy_cloud/AppFlowy-Cloud/docker/gotrue.patch .
 RUN git apply gotrue.patch
 ENV CGO_ENABLED=0
@@ -35,13 +35,15 @@ RUN apk add --no-cache nginx
 # add gotrue
 RUN mkdir /gotrue
 COPY --from=build /gotrue/gotrue/build/gotrue /gotrue
-COPY --from=build /gotrue/gotrue/migrations /gotrue/migrations
+COPY --from=build /gotrue/auth/migrations /gotrue/migrations
 # add appflowy cloud
 RUN mkdir /appflowy_cloud
 COPY appflowy_cloud /appflowy_cloud
 RUN chmod +x /appflowy_cloud/appflowy_cloud
 COPY admin_frontend /appflowy_cloud
 RUN chmod +x /appflowy_cloud/admin_frontend
+COPY appflowy_history /appflowy_cloud
+RUN chmod +x /appflowy_cloud/appflowy_history
 COPY --from=build /appflowy_cloud/AppFlowy-Cloud/admin_frontend/assets /appflowy_cloud/assets
 COPY --from=build /appflowy_cloud/AppFlowy-Cloud/migrations/before /appflowy_cloud
 # setup postgresql
