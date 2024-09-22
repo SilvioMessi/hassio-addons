@@ -1,3 +1,9 @@
+## 0.6.25
+
+- Bump to version 0.6.25
+- Add Appflowy History
+- Update gotrue to auth
+
 ## 0.5.52
 
 - Bump to version 0.5.52

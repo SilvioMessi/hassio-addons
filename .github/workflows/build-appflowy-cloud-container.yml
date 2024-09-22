@@ -57,6 +57,11 @@ jobs:
         with:
           name: ${{ matrix.target }}-admin_frontend-${{needs.get-tag.outputs.tag}}
           path: appflowy_cloud/admin_frontend
+      - name: Download Appflowy History
+        uses: actions/download-artifact@master
+        with:
+          name: ${{ matrix.target }}-appflowy_history-${{needs.get-tag.outputs.tag}}
+          path: appflowy_cloud/appflowy_history
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
