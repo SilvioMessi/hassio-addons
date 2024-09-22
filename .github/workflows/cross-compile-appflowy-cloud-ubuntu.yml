@@ -66,4 +66,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.target }}-appflowy-history-${{ inputs.tag }}
-          path: target/${{ matrix.target }}/release/appflowy-history
+          path: target/${{ matrix.target }}/release/appflowy_history
