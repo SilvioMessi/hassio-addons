@@ -38,6 +38,25 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: "${{ matrix.target }}"
+      - name: Setup Cache
+        uses: Swatinem/rust-cache@v2
+      - name: Build Appflowy Cloud
+        run: cargo build --verbose --locked --release --bin appflowy_cloud --target ${{ matrix.target }}
+      - name: Upload Appflowy Cloud
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.target }}-appflowy_cloud-${{ inputs.tag }}
+          path: target/${{ matrix.target }}/release/appflowy_cloud
+      - name: Build Admin Fronted
+        run: |
+          cd admin_frontend
+          sed -i 's/reqwest = "0.11.27"/reqwest = { version = "0.11.27", features = ["native-tls-vendored"] }/g' Cargo.toml
+          cargo build --verbose --locked --release --bin admin_frontend --target ${{ matrix.target }}
+      - name: Upload Admin Fronted
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.target }}-admin_frontend-${{ inputs.tag }}
+          path: target/${{ matrix.target }}/release/admin_frontend
       - name: Build Appflowy History
         run: |
           sed -i 's/reqwest.workspace = true/reqwest = { workspace = true, features = ["native-tls-vendored"] }/g' libs/app-error/Cargo.toml
