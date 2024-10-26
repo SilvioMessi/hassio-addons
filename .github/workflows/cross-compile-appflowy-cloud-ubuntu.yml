@@ -41,7 +41,9 @@ jobs:
       - name: Setup Cache
         uses: Swatinem/rust-cache@v2
       - name: Build Appflowy Cloud
-        run: cargo build --verbose --locked --release --bin appflowy_cloud --target ${{ matrix.target }}
+        run: |
+          rustup target add aarch64-unknown-linux-musl
+          cargo build --verbose --locked --release --bin appflowy_cloud --target ${{ matrix.target }}
       - name: Upload Appflowy Cloud
         uses: actions/upload-artifact@v4
         with:
