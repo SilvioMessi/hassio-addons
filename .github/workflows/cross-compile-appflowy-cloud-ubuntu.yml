@@ -43,6 +43,7 @@ jobs:
       - name: Build Appflowy Cloud
         run: |
           rustup target add aarch64-unknown-linux-musl
+          rustup target add x86_64-unknown-linux-musl
           cargo build --verbose --locked --release --bin appflowy_cloud --target ${{ matrix.target }}
       - name: Upload Appflowy Cloud
         uses: actions/upload-artifact@v4
