@@ -26,7 +26,11 @@ jobs:
         with:
           repository: AppFlowy-IO/AppFlowy-Cloud
           ref: ${{ inputs.tag }}
-      - name: Prepare
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: "${{ matrix.target }}"
+      - name: Prepare and build dependencies
         run: |
           sudo apt install -y musl-tools protobuf-compiler
           wget https://musl.cc/aarch64-linux-musl-cross.tgz
@@ -34,17 +38,11 @@ jobs:
           mkdir .cargo
           echo [target.aarch64-unknown-linux-musl] >> .cargo/config.toml
           echo 'linker = "./aarch64-linux-musl-cross/bin/aarch64-linux-musl-gcc"' >> .cargo/config.toml
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: "${{ matrix.target }}"
-      - name: Build dependencies
-        run: |
+          rustup target add aarch64-unknown-linux-musl
+          rustup target add x86_64-unknown-linux-musl
           cargo install cargo-chef
           cargo chef prepare --recipe-path recipe.json
           cargo chef cook --release --target ${{ matrix.target }} --recipe-path recipe.json
-          rustup target add aarch64-unknown-linux-musl
-          rustup target add x86_64-unknown-linux-musl
       - name: Build Appflowy Cloud
         run: |
           cargo build --verbose --locked --release --bin appflowy_cloud --target ${{ matrix.target }}
