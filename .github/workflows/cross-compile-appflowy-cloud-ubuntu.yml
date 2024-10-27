@@ -42,7 +42,7 @@ jobs:
         run: |
           cargo install cargo-chef
           cargo chef prepare --recipe-path recipe.json
-          cargo chef cook --release --recipe-path recipe.json
+          cargo chef cook --release --target ${{ matrix.target }} --recipe-path recipe.json
           rustup target add aarch64-unknown-linux-musl
           rustup target add x86_64-unknown-linux-musl
       - name: Build Appflowy Cloud
@@ -56,6 +56,7 @@ jobs:
       - name: Build Admin Fronted
         run: |
           cd admin_frontend
+          sed -i 's/reqwest = "0.11.27"/reqwest = { version = "0.11.27", features = ["native-tls-vendored"] }/g' Cargo.toml
           cargo build --verbose --locked --release --bin admin_frontend --target ${{ matrix.target }}
       - name: Upload Admin Fronted
         uses: actions/upload-artifact@v4
