@@ -38,12 +38,15 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: "${{ matrix.target }}"
-      - name: Setup Cache
-        uses: Swatinem/rust-cache@v2
-      - name: Build Appflowy Cloud
+      - name: Build dependencies
         run: |
+          cargo install cargo-chef
+          cargo chef prepare --recipe-path recipe.json
+          cargo chef cook --release --recipe-path recipe.json
           rustup target add aarch64-unknown-linux-musl
           rustup target add x86_64-unknown-linux-musl
+      - name: Build Appflowy Cloud
+        run: |
           cargo build --verbose --locked --release --bin appflowy_cloud --target ${{ matrix.target }}
       - name: Upload Appflowy Cloud
         uses: actions/upload-artifact@v4
@@ -53,7 +56,6 @@ jobs:
       - name: Build Admin Fronted
         run: |
           cd admin_frontend
-          sed -i 's/reqwest = "0.11.27"/reqwest = { version = "0.11.27", features = ["native-tls-vendored"] }/g' Cargo.toml
           cargo build --verbose --locked --release --bin admin_frontend --target ${{ matrix.target }}
       - name: Upload Admin Fronted
         uses: actions/upload-artifact@v4
@@ -62,7 +64,6 @@ jobs:
           path: target/${{ matrix.target }}/release/admin_frontend
       - name: Build Appflowy History
         run: |
-          sed -i 's/reqwest.workspace = true/reqwest = { workspace = true, features = ["native-tls-vendored"] }/g' libs/app-error/Cargo.toml
           cd services/appflowy-history
           cargo build --verbose --locked --release --bin appflowy_history --target ${{ matrix.target }}
       - name: Upload Appflowy History
@@ -70,3 +71,12 @@ jobs:
         with:
           name: ${{ matrix.target }}-appflowy_history-${{ inputs.tag }}
           path: target/${{ matrix.target }}/release/appflowy_history
+      - name: Build Appflowy Worker
+        run: |
+          cd services/appflowy-worker
+          cargo build --verbose --locked --release --bin appflowy_worker --target ${{ matrix.target }}
+      - name: Upload Appflowy Worker
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.target }}-appflowy_worker-${{ inputs.tag }}
+          path: target/${{ matrix.target }}/release/appflowy_worker
