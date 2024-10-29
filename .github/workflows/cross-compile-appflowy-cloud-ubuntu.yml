@@ -26,7 +26,11 @@ jobs:
         with:
           repository: AppFlowy-IO/AppFlowy-Cloud
           ref: ${{ inputs.tag }}
-      - name: Prepare
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: "${{ matrix.target }}"
+      - name: Prepare and build dependencies
         run: |
           sudo apt install -y musl-tools protobuf-compiler
           wget https://musl.cc/aarch64-linux-musl-cross.tgz
@@ -34,12 +38,10 @@ jobs:
           mkdir .cargo
           echo [target.aarch64-unknown-linux-musl] >> .cargo/config.toml
           echo 'linker = "./aarch64-linux-musl-cross/bin/aarch64-linux-musl-gcc"' >> .cargo/config.toml
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: "${{ matrix.target }}"
-      - name: Setup Cache
-        uses: Swatinem/rust-cache@v2
+          rustup target add aarch64-unknown-linux-musl
+          rustup target add x86_64-unknown-linux-musl
+          sed -i 's/reqwest = "0.11.27"/reqwest = { version = "0.11.27", features = ["native-tls-vendored"] }/g' admin_frontend/Cargo.toml
+          sed -i 's/reqwest.workspace = true/reqwest = { workspace = true, features = ["native-tls-vendored"] }/g' libs/app-error/Cargo.toml
       - name: Build Appflowy Cloud
         run: cargo build --verbose --locked --release --bin appflowy_cloud --target ${{ matrix.target }}
       - name: Upload Appflowy Cloud
@@ -50,7 +52,6 @@ jobs:
       - name: Build Admin Fronted
         run: |
           cd admin_frontend
-          sed -i 's/reqwest = "0.11.27"/reqwest = { version = "0.11.27", features = ["native-tls-vendored"] }/g' Cargo.toml
           cargo build --verbose --locked --release --bin admin_frontend --target ${{ matrix.target }}
       - name: Upload Admin Fronted
         uses: actions/upload-artifact@v4
@@ -59,7 +60,6 @@ jobs:
           path: target/${{ matrix.target }}/release/admin_frontend
       - name: Build Appflowy History
         run: |
-          sed -i 's/reqwest.workspace = true/reqwest = { workspace = true, features = ["native-tls-vendored"] }/g' libs/app-error/Cargo.toml
           cd services/appflowy-history
           cargo build --verbose --locked --release --bin appflowy_history --target ${{ matrix.target }}
       - name: Upload Appflowy History
@@ -67,3 +67,12 @@ jobs:
         with:
           name: ${{ matrix.target }}-appflowy_history-${{ inputs.tag }}
           path: target/${{ matrix.target }}/release/appflowy_history
+      - name: Build Appflowy Worker
+        run: |
+          cd services/appflowy-worker
+          cargo build --verbose --locked --release --bin appflowy_worker --target ${{ matrix.target }}
+      - name: Upload Appflowy Worker
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.target }}-appflowy_worker-${{ inputs.tag }}
+          path: target/${{ matrix.target }}/release/appflowy_worker

@@ -8,8 +8,8 @@ WORKDIR /gotrue
 RUN apk add --no-cache go
 RUN git clone https://github.com/supabase/auth.git --depth 1 --branch v2.159.1
 WORKDIR /gotrue/auth
-RUN cp /appflowy_cloud/AppFlowy-Cloud/docker/gotrue.patch .
-RUN git apply gotrue.patch
+RUN cp /appflowy_cloud/AppFlowy-Cloud/docker/gotrue/patch/mfa_enabled.patch .
+RUN git apply mfa_enabled.patch
 ENV CGO_ENABLED=0
 RUN go build -o /gotrue/gotrue/build/gotrue .
 WORKDIR /pgvector
@@ -44,6 +44,8 @@ COPY admin_frontend /appflowy_cloud
 RUN chmod +x /appflowy_cloud/admin_frontend
 COPY appflowy_history /appflowy_cloud
 RUN chmod +x /appflowy_cloud/appflowy_history
+COPY appflowy_worker /appflowy_cloud
+RUN chmod +x /appflowy_cloud/appflowy_worker
 COPY --from=build /appflowy_cloud/AppFlowy-Cloud/admin_frontend/assets /appflowy_cloud/assets
 COPY --from=build /appflowy_cloud/AppFlowy-Cloud/migrations/before /appflowy_cloud
 # setup postgresql
