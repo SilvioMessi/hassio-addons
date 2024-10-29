@@ -47,7 +47,6 @@ if [ ! -d /data/postgresql ]; then
     su postgres -c 'initdb -D /data/postgresql' >>$LOG_FOLDER/postgres.log 2>&1
 fi
 su postgres -c 'pg_ctl start -D /data/postgresql' >>$LOG_FOLDER/postgres.log 2>&1
-su postgres -c 'psql -f /appflowy_cloud/20230312043000_supabase_auth.sql' >>$LOG_FOLDER/postgres.log 2>&1
 
 bashio::log.info "Initialize redis"
 redis-server >>$LOG_FOLDER/redis.log 2>&1 &
@@ -67,6 +66,7 @@ cd /appflowy_cloud
 ./appflowy_cloud >>$LOG_FOLDER/appflowy_cloud.log 2>&1 &
 ./admin_frontend >>$LOG_FOLDER/appflowy_fronted.log 2>&1 &
 ./appflowy_history >>$LOG_FOLDER/appflowy_history.log 2>&1 &
+./appflowy_worker >>$LOG_FOLDER/appflowy_worker.log 2>&1 &
 
 bashio::log.info "Initialize nginx"
 nginx -g "daemon off;"

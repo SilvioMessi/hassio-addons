@@ -1,3 +1,8 @@
+## 0.6.55
+
+- Bump to version 0.6.55
+- Add Appflowy Worker
+
 ## 0.6.25
 
 - Bump to version 0.6.25
