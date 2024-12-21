@@ -42,8 +42,6 @@ COPY appflowy_cloud /appflowy_cloud
 RUN chmod +x /appflowy_cloud/appflowy_cloud
 COPY admin_frontend /appflowy_cloud
 RUN chmod +x /appflowy_cloud/admin_frontend
-COPY appflowy_history /appflowy_cloud
-RUN chmod +x /appflowy_cloud/appflowy_history
 COPY appflowy_worker /appflowy_cloud
 RUN chmod +x /appflowy_cloud/appflowy_worker
 COPY --from=build /appflowy_cloud/AppFlowy-Cloud/admin_frontend/assets /appflowy_cloud/assets

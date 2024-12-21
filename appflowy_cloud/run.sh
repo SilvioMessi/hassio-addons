@@ -65,7 +65,6 @@ bashio::log.info "Initialize appflowy cloud"
 cd /appflowy_cloud
 ./appflowy_cloud >>$LOG_FOLDER/appflowy_cloud.log 2>&1 &
 ./admin_frontend >>$LOG_FOLDER/appflowy_fronted.log 2>&1 &
-./appflowy_history >>$LOG_FOLDER/appflowy_history.log 2>&1 &
 ./appflowy_worker >>$LOG_FOLDER/appflowy_worker.log 2>&1 &
 
 bashio::log.info "Initialize nginx"
