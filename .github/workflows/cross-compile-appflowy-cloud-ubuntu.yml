@@ -58,15 +58,6 @@ jobs:
         with:
           name: ${{ matrix.target }}-admin_frontend-${{ inputs.tag }}
           path: target/${{ matrix.target }}/release/admin_frontend
-      - name: Build Appflowy History
-        run: |
-          cd services/appflowy-history
-          cargo build --verbose --locked --release --bin appflowy_history --target ${{ matrix.target }}
-      - name: Upload Appflowy History
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.target }}-appflowy_history-${{ inputs.tag }}
-          path: target/${{ matrix.target }}/release/appflowy_history
       - name: Build Appflowy Worker
         run: |
           cd services/appflowy-worker

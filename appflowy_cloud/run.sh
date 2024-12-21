@@ -31,8 +31,11 @@ export APPFLOWY_GOTRUE_JWT_SECRET=$SECRET
 bashio::log.info "Set ADMIN_EMAIL and ADMIN_PASSWORD"
 ADMIN_EMAIL="$(bashio::config 'ADMIN_EMAIL')"
 ADMIN_PASSWORD="$(bashio::config 'ADMIN_PASSWORD')"
+export GOTRUE_ADMIN_EMAIL=$ADMIN_EMAIL
 export APPFLOWY_GOTRUE_ADMIN_EMAIL=$ADMIN_EMAIL
+export GOTRUE_ADMIN_PASSWORD=$ADMIN_PASSWORD
 export APPFLOWY_GOTRUE_ADMIN_PASSWORD=$ADMIN_PASSWORD
+export GOTRUE_JWT_ADMIN_GROUP_NAME=supabase_admin
 
 bashio::log.info "Log cleanup"
 if [ -d $LOG_FOLDER ]; then
@@ -47,6 +50,7 @@ if [ ! -d /data/postgresql ]; then
     su postgres -c 'initdb -D /data/postgresql' >>$LOG_FOLDER/postgres.log 2>&1
 fi
 su postgres -c 'pg_ctl start -D /data/postgresql' >>$LOG_FOLDER/postgres.log 2>&1
+sh /appflowy_cloud/migrations/before/supabase_auth.sh >>$LOG_FOLDER/postgres.log 2>&1
 
 bashio::log.info "Initialize redis"
 redis-server >>$LOG_FOLDER/redis.log 2>&1 &
@@ -56,16 +60,15 @@ bashio::log.info "Initialize minio"
 minio server /data/minio >>$LOG_FOLDER/minio.log 2>&1 &
 check_port_availability "localhost" "9000" 15 "minio"
 
-bashio::log.info "Initialize gotrue"
-cd /gotrue
-./gotrue >>$LOG_FOLDER/gotrue.log 2>&1 &
-check_port_availability "localhost" "9999" 15 "gotrue"
+bashio::log.info "Initialize auth"
+cd /auth
+./start.sh >>$LOG_FOLDER/auth.log 2>&1 &
+check_port_availability "localhost" "9999" 15 "auth"
 
 bashio::log.info "Initialize appflowy cloud"
 cd /appflowy_cloud
 ./appflowy_cloud >>$LOG_FOLDER/appflowy_cloud.log 2>&1 &
 ./admin_frontend >>$LOG_FOLDER/appflowy_fronted.log 2>&1 &
-./appflowy_history >>$LOG_FOLDER/appflowy_history.log 2>&1 &
 ./appflowy_worker >>$LOG_FOLDER/appflowy_worker.log 2>&1 &
 
 bashio::log.info "Initialize nginx"
