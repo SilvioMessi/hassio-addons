@@ -28,8 +28,6 @@ environment:
   ADMIN_FRONTEND_GOTRUE_URL: http://localhost:9999
   ADMIN_FRONTEND_APPFLOWY_CLOUD_URL: http://localhost:8000
   APPFLOWY_GRPC_HISTORY_ADDRS: http://localhost:50051
-  APPFLOWY_HISTORY_REDIS_URL: redis://localhost:6379
-  APPFLOWY_HISTORY_DATABASE_URL: postgres://postgres:password@localhost:5432/postgres
   APPFLOWY_INDEXER_ENABLED: "true"
   APPFLOWY_INDEXER_DATABASE_URL: postgres://postgres:password@localhost:5432/postgres
   APPFLOWY_INDEXER_REDIS_URL: redis://localhost:6379
