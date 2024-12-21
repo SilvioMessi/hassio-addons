@@ -1,18 +1,18 @@
 ## 0.8.16
 
 - Bump to version 0.8.16
-- Remove Appflowy History
+- Remove AppFlowy History
 - Fix initialization of database and auth
 
 ## 0.6.55
 
 - Bump to version 0.6.55
-- Add Appflowy Worker
+- Add AppFlowy Worker
 
 ## 0.6.25
 
 - Bump to version 0.6.25
-- Add Appflowy History
+- Add AppFlowy History
 - Update gotrue to auth
 
 ## 0.5.52
