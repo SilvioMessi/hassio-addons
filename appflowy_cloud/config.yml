@@ -1,6 +1,6 @@
 name: AppFlowy Cloud
 description: AppFlowy Cloud
-version: 0.6.55
+version: 0.8.16
 slug: appflowy_cloud
 url: "https://github.com/SilvioMessi/hassio-addons/tree/main/appflowy_cloud"
 image: ghcr.io/silviomessi/hassio-addons/appflowy_cloud-{arch}
@@ -33,9 +33,14 @@ environment:
   APPFLOWY_INDEXER_REDIS_URL: redis://localhost:6379
   APPFLOWY_COLLABORATE_MULTI_THREAD: "false"
   APPFLOWY_COLLABORATE_REMOVE_BATCH_SIZE: "100"
-  APPFLOWY_WORKER_REDIS_URL: "redis://localhost:6379"
-  APPFLOWY_WORKER_ENVIRONMENT: "production"
-  APPFLOWY_WORKER_DATABASE_URL: "postgres://postgres:password@localhost:5432/postgres"
+  APPFLOWY_WORKER_REDIS_URL: redis://localhost:6379
+  APPFLOWY_WORKER_ENVIRONMENT: production
+  APPFLOWY_WORKER_DATABASE_URL: postgres://postgres:password@localhost:5432/postgres
+  # required by migrations/before/supabase_auth.sh
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  POSTGRES_DB: postgres
+  SUPABASE_PASSWORD: root
 options:
   SECRET: change_me
   ADMIN_EMAIL: admin@example.com

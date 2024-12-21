@@ -1,3 +1,9 @@
+## 0.8.16
+
+- Bump to version 0.8.16
+- Remove Appflowy History
+- Fix initialization of database and auth
+
 ## 0.6.55
 
 - Bump to version 0.6.55
