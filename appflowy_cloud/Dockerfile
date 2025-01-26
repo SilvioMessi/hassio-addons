@@ -1,8 +1,19 @@
-ARG BUILD_FROM
+ARG BUILD_FROM=ghcr.io/home-assistant/amd64-base:3.20
+
+FROM node:20.12.0 AS build-web
+ARG APPFLOWY_WEB_VERSION=v0.1.4
+WORKDIR /app
+RUN npm install -g pnpm@8.5.0
+RUN git clone https://github.com/AppFlowy-IO/AppFlowy-Web.git --depth 1 --branch $APPFLOWY_WEB_VERSION .
+RUN pnpm install
+ENV AF_BASE_URL=AF_BASE_URL_PLACEHOLDER
+ENV AF_GOTRUE_URL=AF_GOTRUE_URL_PLACEHOLDER
+RUN pnpm run build
+
 FROM $BUILD_FROM AS build
+ARG BUILD_VERSION=main
 WORKDIR /appflowy_cloud
 RUN apk add --no-cache git
-ARG BUILD_VERSION
 RUN git clone https://github.com/AppFlowy-IO/AppFlowy-Cloud.git --depth 1 --branch $BUILD_VERSION
 WORKDIR /go/src/supabase
 RUN apk add --no-cache go
@@ -47,6 +58,11 @@ COPY appflowy_worker /appflowy_cloud
 RUN chmod +x /appflowy_cloud/appflowy_worker
 COPY --from=build /appflowy_cloud/AppFlowy-Cloud/admin_frontend/assets /appflowy_cloud/assets
 COPY --from=build /appflowy_cloud/AppFlowy-Cloud/migrations /appflowy_cloud/migrations
+# add appflowy web
+RUN mkdir /appflowy_web
+COPY --from=build-web /app/dist /usr/share/nginx/html/
+COPY env.sh /appflowy_web
+RUN chmod +x /appflowy_web/env.sh
 # setup postgresql
 # https://luppeng.wordpress.com/2020/02/28/install-and-start-postgresql-on-alpine-linux/
 RUN mkdir /run/postgresql
