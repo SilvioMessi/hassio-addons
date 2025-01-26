@@ -62,7 +62,7 @@ bashio::log.info "Initialize database"
 if [ ! -d /data/postgresql ]; then
     mkdir -p /data/postgresql >>$LOG_FOLDER/postgres.log 2>&1
     chown postgres:postgres /data/postgresql >>$LOG_FOLDER/postgres.log 2>&1
-    su postgres -c 'initdb -D /data/postgresql' >>$LOG_FOLDER/postgres.log 2>&1      
+    su postgres -c 'initdb -D /data/postgresql' >>$LOG_FOLDER/postgres.log 2>&1
 fi
 su postgres -c 'pg_ctl start -D /data/postgresql' >>$LOG_FOLDER/postgres.log 2>&1
 sh /appflowy_cloud/migrations/before/supabase_auth.sh >>$LOG_FOLDER/postgres.log 2>&1
