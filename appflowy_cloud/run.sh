@@ -23,19 +23,34 @@ check_port_availability() {
 
 LOG_FOLDER=/data/logs
 
-bashio::log.info "Set SECRET"
+bashio::log.info "Set parameters"
 SECRET="$(bashio::config 'SECRET')"
-export GOTRUE_JWT_SECRET=$SECRET
-export APPFLOWY_GOTRUE_JWT_SECRET=$SECRET
-
-bashio::log.info "Set ADMIN_EMAIL and ADMIN_PASSWORD"
 ADMIN_EMAIL="$(bashio::config 'ADMIN_EMAIL')"
 ADMIN_PASSWORD="$(bashio::config 'ADMIN_PASSWORD')"
+PUBLIC_URL="$(bashio::config 'PUBLIC_URL')"
+SMTP_HOST="$(bashio::config 'SMTP_HOST')"
+SMTP_PORT="$(bashio::config 'SMTP_PORT')"
+SMTP_USER="$(bashio::config 'SMTP_USER')"
+SMTP_PASSWORD="$(bashio::config 'SMTP_PASSWORD')"
+
+export GOTRUE_JWT_SECRET=$SECRET
+export APPFLOWY_GOTRUE_JWT_SECRET=$SECRET
 export GOTRUE_ADMIN_EMAIL=$ADMIN_EMAIL
 export APPFLOWY_GOTRUE_ADMIN_EMAIL=$ADMIN_EMAIL
 export GOTRUE_ADMIN_PASSWORD=$ADMIN_PASSWORD
 export APPFLOWY_GOTRUE_ADMIN_PASSWORD=$ADMIN_PASSWORD
 export GOTRUE_JWT_ADMIN_GROUP_NAME=supabase_admin
+export GOTRUE_SMTP_HOST=$SMTP_HOST
+export GOTRUE_SMTP_PORT=$SMTP_PORT
+export GOTRUE_SMTP_USER=$SMTP_USER
+export GOTRUE_SMTP_PASS=$SMTP_PASSWORD
+export GOTRUE_SMTP_ADMIN_EMAIL=$SMTP_USER
+export API_EXTERNAL_URL="$PUBLIC_URL/gotrue"
+export APPFLOWY_GOTRUE_EXT_URL="$PUBLIC_URL/gotrue"
+export AF_GOTRUE_URL="$PUBLIC_URL/gotrue"
+export GOTRUE_SITE_URL=$PUBLIC_URL
+export APPFLOWY_WEB_URL=$PUBLIC_URL
+export AF_BASE_URL=$PUBLIC_URL
 
 bashio::log.info "Log cleanup"
 if [ -d $LOG_FOLDER ]; then
@@ -70,6 +85,10 @@ cd /appflowy_cloud
 ./appflowy_cloud >>$LOG_FOLDER/appflowy_cloud.log 2>&1 &
 ./admin_frontend >>$LOG_FOLDER/appflowy_fronted.log 2>&1 &
 ./appflowy_worker >>$LOG_FOLDER/appflowy_worker.log 2>&1 &
+
+bashio::log.info "Initialize appflowy web"
+cd /appflowy_web
+sh ./env.sh >>$LOG_FOLDER/appflowy_web.log 2>&1 &
 
 bashio::log.info "Initialize nginx"
 nginx -g "daemon off;"

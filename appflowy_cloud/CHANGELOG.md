@@ -1,3 +1,9 @@
+## 0.9.18
+
+- Bump to version 0.9.18
+- Experimental support of AppFlowy Web (version 0.1.4)
+- Introduce new parameters (PUBLIC_URL and SMTP) to support AppFlowy Web
+
 ## 0.8.16
 
 - Bump to version 0.8.16

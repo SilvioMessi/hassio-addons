@@ -8,6 +8,11 @@ Add-on configuration:
   SECRET: change_me
   ADMIN_EMAIL: admin@example.com
   ADMIN_PASSWORD: password
+  PUBLIC_URL: http://localhost
+  SMTP_HOST: smtp.example.com
+  SMTP_PORT: 465
+  SMTP_USER: user@example.com
+  SMTP_PASSWORD: password
 ```
 
 ### Option: `SECRET` (required)
@@ -24,6 +29,32 @@ Every time you change this email a new admin user will be created (if the email 
 
 Admin user password.  
 This only takes effect the first time the new admin user is create. Once the user is created the password can be changed in the admin panel.
+
+### Option: `PUBLIC_URL` (required)
+
+The public URL you are using to expose the AppFlowy add-on.
+This is typically the URL or IP address you use to connect to your Home Assistant, including the port used to expose the AppFlowy add-on. If you have configured a port other than 80, please include it in the URL. For example: `http://localhost:8080`.
+
+### Option: `SMTP_HOST` (required)
+
+For certain use cases (such as logging in via a magic link when using AppFlowy Web), an SMTP server is required to send the login link via email.
+This is the SMTP server hostname.
+
+### Option: `SMTP_PORT` (required)
+
+The SMTP server port.
+
+### Option: `SMTP_USER` (required)
+
+The SMTP server user, usually an email address.
+
+### Option: `SMTP_PASSWORD` (required)
+
+The SMTP server password.
+
+## Usage
+
+Once the add-on is started, click on OPEN WEB UI. This will open a new browser tab at the `PUBLIC_URL`, displaying the AppFlowy Web application. For user management, please visit `PUBLIC_URL/console`
 
 ## Support
 
