@@ -1,3 +1,8 @@
+## 0.9.23
+
+- Bump to version 0.9.23
+- Bump version of AppFlowy Web to 0.1.5
+
 ## 0.9.18
 
 - Bump to version 0.9.18
