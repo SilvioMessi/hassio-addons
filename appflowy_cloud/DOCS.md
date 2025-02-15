@@ -54,7 +54,7 @@ The SMTP server password.
 
 ## Usage
 
-Once the add-on is started, click on OPEN WEB UI. This will open a new browser tab at the `PUBLIC_URL`, displaying the AppFlowy Web application. For user management, please visit `PUBLIC_URL/console`
+Once the add-on is started, click on OPEN WEB UI. This will open a new browser tab at the `PUBLIC_URL`, displaying the AppFlowy Web application. For admin panel, (users management), please visit `PUBLIC_URL/console`
 
 ## Support
 
