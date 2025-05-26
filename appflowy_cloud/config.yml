@@ -1,6 +1,6 @@
 name: AppFlowy Cloud
 description: AppFlowy Cloud
-version: 0.9.37
+version: 0.9.52
 slug: appflowy_cloud
 url: "https://github.com/SilvioMessi/hassio-addons/tree/main/appflowy_cloud"
 image: ghcr.io/silviomessi/hassio-addons/appflowy_cloud-{arch}
@@ -38,11 +38,6 @@ environment:
   APPFLOWY_WORKER_ENVIRONMENT: production
   APPFLOWY_WORKER_DATABASE_URL: postgres://postgres:password@localhost:5432/postgres
   APPFLOWY_WORKER_DATABASE_NAME: postgres
-  # required by script supabase_auth.sh
-  POSTGRES_USER: postgres
-  POSTGRES_PASSWORD: postgres
-  POSTGRES_DB: postgres
-  SUPABASE_PASSWORD: root
 options:
   SECRET: change_me
   ADMIN_EMAIL: admin@example.com
