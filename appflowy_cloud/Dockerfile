@@ -1,13 +1,12 @@
 ARG BUILD_FROM=ghcr.io/home-assistant/amd64-base:3.20
 
 FROM node:20.12.0 AS build-web
-ARG APPFLOWY_WEB_VERSION=v0.1.13
+ARG APPFLOWY_WEB_VERSION=v0.1.18
 WORKDIR /app
 RUN npm install -g pnpm@8.5.0
 RUN git clone https://github.com/AppFlowy-IO/AppFlowy-Web.git --depth 1 --branch $APPFLOWY_WEB_VERSION .
 RUN pnpm install
-ENV AF_BASE_URL=AF_BASE_URL_PLACEHOLDER
-ENV AF_GOTRUE_URL=AF_GOTRUE_URL_PLACEHOLDER
+RUN sed -i 's|https://test.appflowy.cloud||g' src/components/main/app.hooks.ts
 RUN pnpm run build
 
 FROM $BUILD_FROM AS build
@@ -17,12 +16,9 @@ RUN apk add --no-cache git
 RUN git clone https://github.com/AppFlowy-IO/AppFlowy-Cloud.git --depth 1 --branch $BUILD_VERSION
 WORKDIR /go/src/supabase
 RUN apk add --no-cache go
-RUN git clone https://github.com/supabase/auth.git --depth 1 --branch v2.159.1
+RUN git clone https://github.com/AppFlowy-IO/auth.git --depth 1 --branch 0.8.0
 WORKDIR /go/src/supabase/auth
-RUN cp /appflowy_cloud/AppFlowy-Cloud/docker/gotrue/patch/mfa_enabled.patch .
-RUN git apply mfa_enabled.patch
 RUN CGO_ENABLED=0 go build -o /auth .
-RUN rm /go/src/supabase/auth/migrations/20240612123726_enable_rls_update_grants.up.sql
 WORKDIR /pgvector
 RUN apk add --no-cache build-base
 RUN apk add --no-cache postgresql16-dev
@@ -61,8 +57,6 @@ COPY --from=build /appflowy_cloud/AppFlowy-Cloud/migrations /appflowy_cloud/migr
 # add appflowy web
 RUN mkdir /appflowy_web
 COPY --from=build-web /app/dist /usr/share/nginx/html/
-COPY --from=build /appflowy_cloud/AppFlowy-Cloud/docker/web/env.sh /appflowy_web
-RUN chmod +x /appflowy_web/env.sh
 # setup postgresql
 # https://luppeng.wordpress.com/2020/02/28/install-and-start-postgresql-on-alpine-linux/
 RUN mkdir /run/postgresql

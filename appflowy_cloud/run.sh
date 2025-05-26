@@ -51,7 +51,6 @@ export AF_GOTRUE_URL="$PUBLIC_URL/gotrue"
 export APPFLOWY_S3_PRESIGNED_URL_ENDPOINT="$PUBLIC_URL/minio-api"
 export GOTRUE_SITE_URL=$PUBLIC_URL
 export APPFLOWY_WEB_URL=$PUBLIC_URL
-export AF_BASE_URL=$PUBLIC_URL
 
 bashio::log.info "Log cleanup"
 if [ -d $LOG_FOLDER ]; then
@@ -66,7 +65,6 @@ if [ ! -d /data/postgresql ]; then
     su postgres -c 'initdb -D /data/postgresql' >>$LOG_FOLDER/postgres.log 2>&1
 fi
 su postgres -c 'pg_ctl start -D /data/postgresql' >>$LOG_FOLDER/postgres.log 2>&1
-sh /appflowy_cloud/migrations/before/supabase_auth.sh >>$LOG_FOLDER/postgres.log 2>&1
 
 bashio::log.info "Initialize redis"
 redis-server >>$LOG_FOLDER/redis.log 2>&1 &
@@ -86,10 +84,6 @@ cd /appflowy_cloud
 ./appflowy_cloud >>$LOG_FOLDER/appflowy_cloud.log 2>&1 &
 ./admin_frontend >>$LOG_FOLDER/appflowy_fronted.log 2>&1 &
 ./appflowy_worker >>$LOG_FOLDER/appflowy_worker.log 2>&1 &
-
-bashio::log.info "Initialize appflowy web"
-cd /appflowy_web
-sh ./env.sh >>$LOG_FOLDER/appflowy_web.log 2>&1 &
 
 bashio::log.info "Initialize nginx"
 nginx -g "daemon off;"
